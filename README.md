@@ -79,6 +79,12 @@ puts them; the on-screen prompts still show LT / RT. Menus are navigated with th
 > [!WARNING]
 Closing submenus or going back by pressing the B button isn't working right now.
 
+## Resolution
+
+Both handheld and docked render at **1280x720**. In handheld that is the native
+panel resolution; in docked the Switch compositor upscales the 720p image to the
+1080p output.
+
 ## Build
 
 devkitA64 plus these portlibs:
