@@ -85,6 +85,8 @@ Both handheld and docked render at **1280x720**. In handheld that is the native
 panel resolution; in docked the Switch compositor upscales the 720p image to the
 1080p output.
 
+Check **the REASON [IN THIS PR](https://github.com/StevensND/zombotron_nx/pull/1)**
+
 ## Build
 
 devkitA64 plus these portlibs:
