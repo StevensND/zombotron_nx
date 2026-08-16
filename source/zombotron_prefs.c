@@ -81,8 +81,22 @@ static void *h_GetString1(void *key, void *mi) { (void)mi;
   return g_string_new ? g_string_new("") : NULL;
 }
 static void h_SetString(void *key, void *val, void *mi) { (void)mi;
-  char k[256], v[2048];
-  if (str_utf8(key, k, sizeof k)) { str_utf8(val, v, sizeof v); nx_prefs_set('S', k, v); }
+  char k[256];
+  if (!str_utf8(key, k, sizeof k)) return;
+  /* Size the value buffer to the whole string. A fixed 2048-byte buffer here used
+   * to TRUNCATE long values mid-string: the achievements record grows past 2 KB as
+   * the player unlocks things, and a truncated value is invalid JSON in prefs.kv,
+   * so the next boot failed to parse the save and hung on a black screen (it looked
+   * like the save was lost -- it wasn't, it was being written cut off). str_utf8
+   * emits at most 3 bytes per UTF-16 code unit, so 3*len+8 always fits. */
+  int ulen = val ? *(int *)((char *)val + 0x10) : 0;
+  if (ulen < 0) ulen = 0;
+  size_t vsz = (size_t)ulen * 3 + 8;
+  char *v = (char *)malloc(vsz);
+  if (!v) return;                    /* OOM: skip rather than write a truncated (corrupt) value */
+  str_utf8(val, v, vsz);
+  nx_prefs_set('S', k, v);
+  free(v);
 }
 static int h_GetInt(void *key, int def, void *mi) { (void)mi;
   char k[256];

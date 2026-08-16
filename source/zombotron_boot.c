@@ -369,6 +369,28 @@ int zb_boot_and_run(void) {
      * does not fire for operation-mode changes. */
     android_native_update_mode();
 
+    /* Dock/undock display re-sync. The Switch changes the display mode when you
+     * dock or undock, and the compositor can reset this layer's crop/transform
+     * when it does -- leaving the game presenting into a mis-configured window,
+     * which shows as a black screen (the save is untouched; only the display is
+     * wedged). The render resolution is 720p in both modes (upscaled by the
+     * compositor when docked), so android_native_update_mode() above sees no size
+     * change and nothing re-asserts the window. Detect the operation-mode flip
+     * and re-assert the crop/transform for a few frames while the compositor
+     * settles -- no surface re-create, which would corrupt the buffer queue. */
+    {
+      static int s_last_op_mode = -1;
+      static int s_reassert_frames = 0;
+      int op_mode = (appletGetOperationMode() == AppletOperationMode_Console) ? 1 : 0;
+      if (s_last_op_mode >= 0 && op_mode != s_last_op_mode) {
+        debugPrintf("[gfx] operation mode changed -> %s; re-asserting window\n",
+                    op_mode ? "DOCKED" : "HANDHELD");
+        s_reassert_frames = 5;
+      }
+      s_last_op_mode = op_mode;
+      if (s_reassert_frames > 0) { s_reassert_frames--; nx_window_reassert(); }
+    }
+
     /* Samples deltaTime for the managed Time hooks. Must be once per frame. */
     zb_time_tick();
 
