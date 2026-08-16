@@ -20,7 +20,7 @@ include $(DEVKITPRO)/libnx/switch_rules
 TARGET      := zombotron_nx
 APP_TITLE   := Zombotron Re-Boot
 APP_AUTHOR  := StevensND
-APP_VERSION := 1.0.1
+APP_VERSION := 1.0.2
 APP_ICON    := $(TOPDIR)/icon.jpg
 export APP_TITLE APP_AUTHOR APP_VERSION APP_ICON
 BUILD    := build
