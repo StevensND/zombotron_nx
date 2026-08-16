@@ -403,42 +403,21 @@
 #define TRACE_IO   0
 #define TRACE_MMAP 0
 
-/* FORCED render resolution, applied in both docked and handheld mode.
- * Docked is natively 1080p; in handheld the compositor downscales, i.e. we
- * supersample. Touch scaling and DPI reporting both derive from
- * screen_width/screen_height and follow automatically. */
-/* 720p, not 1080p.
+/* DOCKED render resolution. Handheld always renders at its native 1280x720
+ * (main.c hardcodes that); this value is used for the docked path only. Touch
+ * scaling and DPI reporting derive from screen_width/screen_height and follow
+ * automatically.
  *
- * The console reports free=3 MB after our heap setup, and switch-mesa allocates
- * GPU memory from that same pool. Resolution is the one lever that reduces
- * graphics memory without touching the heap layout at all:
- *
- *     1920x1080 = 7.9 MB/buffer   (23.7 MB triple-buffered)
- *     1280x720  = 3.5 MB/buffer   (10.5 MB triple-buffered)
- *
- * plus every full-screen render target the game allocates scales the same way,
- * and Zombotron's loading screen creates at least one.
- *
- * The handheld panel is 1280x720, so 1080p was being downscaled by the
- * compositor regardless -- this costs nothing in handheld and only softens
- * docked output. If the freeze at frame ~21-26 is the graphics driver failing an
- * allocation, halving its footprint is the cheapest test of that theory, and it
- * needs no risky code running before the log exists. */
-/* RAISED TO 1080p ON REQUEST -- the game exposes a resolution slider, so the
- * intent is to render high and let the player scale down in settings.
- *
- * Read the note above before leaving this here. 720p was not an aesthetic
- * choice: it was the memory-pressure mitigation, and this is the single lever
- * that moves GPU memory without touching heap layout. Going back to 1080p costs
- * ~13 MB more in swapchain alone (10.5 -> 23.7 MB triple-buffered) plus the same
- * factor on every full-screen render target the game allocates, out of a pool
- * the console reports as having 3 MB free.
- *
- * The frame-0 freeze chased in the previous build was never conclusively
- * attributed, and memory was the leading remaining suspect. If it comes back,
- * these two lines are the first thing to revert -- 1280 / 720. */
-#define ZB_FORCE_SCREEN_W 1920
-#define ZB_FORCE_SCREEN_H 1080
+ * Set to 720p, NOT docked's native 1080p. Rendering 1080p while docked is 2.25x
+ * the GPU fill of 720p, and this game cannot hold 60fps at that on the Switch:
+ * the frame rate drops, the game clock slows (slow-motion coin/reward pickup
+ * animations, and pickups that occasionally never register) and input is missed
+ * during particle-heavy effects. At 720p the compositor upscales to the 1080p
+ * output -- the image is slightly softer but it holds a fluid 60fps, matching
+ * handheld. Raising these two lines toward 1080p (or a middle 1600x900) trades
+ * that fluidity back for sharpness. */
+#define ZB_FORCE_SCREEN_W 1280
+#define ZB_FORCE_SCREEN_H 720
 
 extern int screen_width;
 extern int screen_height;

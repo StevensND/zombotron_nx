@@ -673,7 +673,7 @@ int main(int argc, char *argv[]) {
   }
 
   if (appletGetOperationMode() == AppletOperationMode_Console) {
-    screen_width  = ZB_FORCE_SCREEN_W;   /* docked: full 1920x1080 */
+    screen_width  = ZB_FORCE_SCREEN_W;   /* docked: 720p, compositor upscales to 1080p (fluidity) */
     screen_height = ZB_FORCE_SCREEN_H;
   } else {
     /* Handheld: the panel is 1280x720. Rendering 1080p and letting the compositor
