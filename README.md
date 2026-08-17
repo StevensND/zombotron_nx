@@ -21,7 +21,7 @@ Create a folder for the game on your SD card, `/switch/zombotron_nx/`, and place
 1. `zombotron_nx.nro`.
 2. The `.so` libraries and the `assets` folder from the Zombotron Re-Boot 
    APK. Open the APK with 7-Zip or another ZIP extractor: copy the libraries out
-   of `lib/arm64-v8a/` into the folder, and copy the whole `assets/` tree as-is.
+   of `lib/arm64-v8a/` into the folder and **copy the whole `assets/` folder.**
 
 ```text
 /switch/zombotron_nx/
@@ -38,12 +38,12 @@ Create a folder for the game on your SD card, `/switch/zombotron_nx/`, and place
 The four `.so` files can sit next to the `.nro` (as above) **or** grouped inside a
 `lib/` subfolder (`/switch/zombotron_nx/lib/libmain.so`, and so on) if you prefer a
 tidier root — the loader checks both locations. Zombotron Re-Boot ships most of its
-content through **Addressables** (`assets/aa/`), so copy the entire `assets/` tree,
+content through addressables, so **copy the entire `assets/`** folder,
 not just `bin/Data`.
 
 Your folder should look like this:
 
-![imagen](https://i.imgur.com/FhwCkTU.png)
+https://github.com/user-attachments/assets/f302b914-aed2-475a-b779-7342fc934809
 
 Launch with a game override (hold **R** while starting an installed title) or a
 forwarder. Album applet mode does not provide enough memory or the required
