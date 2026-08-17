@@ -41,7 +41,7 @@ tidier root — the loader checks both locations. Zombotron Re-Boot ships most o
 content through addressables, so **copy the entire `assets/` folder**,
 not just `bin/Data`.
 
-Your folder should look like this:
+Your `zombotron_nx` folder should look like this:
 
 https://github.com/user-attachments/assets/f302b914-aed2-475a-b779-7342fc934809
 
