@@ -38,7 +38,7 @@ Create a folder for the game on your SD card, `/switch/zombotron_nx/`, and place
 The four `.so` files can sit next to the `.nro` (as above) **or** grouped inside a
 `lib/` subfolder (`/switch/zombotron_nx/lib/libmain.so`, and so on) if you prefer a
 tidier root — the loader checks both locations. Zombotron Re-Boot ships most of its
-content through addressables, so **copy the entire `assets/`** folder,
+content through addressables, so **copy the entire `assets/` folder**,
 not just `bin/Data`.
 
 Your folder should look like this:
